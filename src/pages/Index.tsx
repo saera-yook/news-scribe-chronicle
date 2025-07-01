@@ -28,6 +28,8 @@ const Index = () => {
   const [myArticles, setMyArticles] = useState<UserArticle[]>(mockUserArticles);
   const [myArticlesMap, setMyArticlesMap] = useState<Record<string, boolean>>({
     'https://newstapa.org/article/20250627-education-seminar': true,
+    'https://hankyoreh.com/article/20250626-climate-policy': true,
+    'https://ytn.co.kr/article/20250625-housing-crisis': true,
   });
   
   // Subscription data
