@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Home, Clock, Heart, Menu } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -32,6 +31,23 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
 
   const isActive = (id: string) => currentView === id;
 
+  const handleMenuClick = (id: string) => {
+    onViewChange(id);
+    
+    // "내가 조회한 기사" 메뉴 클릭 시 해당 섹션으로 스크롤
+    if (id === 'myArticles') {
+      setTimeout(() => {
+        const myArticlesSection = document.getElementById('myArticlesSection');
+        if (myArticlesSection) {
+          myArticlesSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <Sidebar className={`${collapsed ? 'w-14' : 'w-64'} transition-all duration-300`} collapsible="icon">
       <SidebarTrigger className="m-2 self-end" />
@@ -63,7 +79,7 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
-                    onClick={() => onViewChange(item.id)}
+                    onClick={() => handleMenuClick(item.id)}
                     className={`
                       ${isActive(item.id) 
                         ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium' 

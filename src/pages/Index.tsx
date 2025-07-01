@@ -195,7 +195,7 @@ const Index = () => {
       </div>
       
       {myArticles.length > 0 && (
-        <div className="space-y-6">
+        <div id="myArticlesSection" className="space-y-6">
           <h2 className="text-2xl font-bold text-gray-900">내가 조회한 기사</h2>
           <div className="grid gap-4">
             {myArticles.map((article, index) => (
