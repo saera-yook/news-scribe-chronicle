@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -38,7 +37,7 @@ const Index = () => {
     likedArticles: [
       {
         url: 'https://newstapa.org/article/20250627-education-seminar',
-        title: '대한교조, 리박스쿨, 뉴라이트의 '극우 역사 세미나'',
+        title: '대한교조, 리박스쿨, 뉴라이트의 극우 역사 세미나',
         date: '2025-06-27',
         history: []
       }
