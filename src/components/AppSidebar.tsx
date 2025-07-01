@@ -21,7 +21,8 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const collapsed = state === 'collapsed';
 
   const menuItems = [
     { id: 'home', title: '기사 목록', icon: Home },
@@ -32,7 +33,7 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
   const isActive = (id: string) => currentView === id;
 
   return (
-    <Sidebar className={`${collapsed ? 'w-14' : 'w-64'} transition-all duration-300`} collapsible>
+    <Sidebar className={`${collapsed ? 'w-14' : 'w-64'} transition-all duration-300`} collapsible="icon">
       <SidebarTrigger className="m-2 self-end" />
       
       <SidebarContent className="bg-sidebar">
