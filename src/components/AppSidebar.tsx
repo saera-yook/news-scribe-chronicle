@@ -34,6 +34,16 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
   const handleMenuClick = (id: string) => {
     onViewChange(id);
     
+    // "기사 목록" 메뉴 클릭 시 페이지 상단으로 스크롤
+    if (id === 'home') {
+      setTimeout(() => {
+        window.scrollTo({ 
+          top: 0, 
+          behavior: 'smooth' 
+        });
+      }, 100);
+    }
+    
     // "내가 조회한 기사" 메뉴 클릭 시 해당 섹션으로 스크롤
     if (id === 'myArticles') {
       setTimeout(() => {
