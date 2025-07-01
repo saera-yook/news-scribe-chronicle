@@ -1,73 +1,40 @@
-# Welcome to your Lovable project
+# 뉴스 기사 수정 이력 조회 서비스
 
-## Project info
+## 1. 🧭 제품 개요
+온라인 뉴스 기사의 신뢰성과 투명성을 높이기 위해, 기사의 수정 이력(제목 및 본문 변경사항)을 사용자에게 시각적으로 제공하는 웹 서비스를 개발한다.
+사용자는 특정 기사의 수정 이력을 시간 순서대로 확인하고, 수정된 문장을 비교하거나 저장할 수 있다.
 
-**URL**: https://lovable.dev/projects/908fc9aa-6e09-4f0d-b4e9-9ec3b64d5e02
+## 2. 🎯 문제 정의
+- 언론 기사 제목 및 본문이 수정되었음에도 불구하고 그 내역을 확인할 수 있는 경로가 없다.
+- 정보 왜곡, 클릭 유도, 편향적 보도 등에 대한 신뢰 저하가 발생한다.
+- 독자는 기사 수정을 인지하지 못한 채 초기 내용만 신뢰하거나 공유하게 되는 문제가 있다.
 
-## How can I edit this code?
+## 3. 👥 주요 사용자 페르소나
+1. 김소연 (34세, 직장인 마케터)
+- 관심사: 정치/사회 이슈에 대한 공정한 보도
+- 목표: 수정된 기사 제목이나 본문을 비교하고 신뢰할 수 있는 매체 판단
+- 기기: 모바일 기반 뉴스 앱
 
-There are several ways of editing your application.
+### 🧑‍💼 페르소나 1: 민감한 사회 이슈에 관심 많은 직장인 '김소연'
 
-**Use Lovable**
+- **나이/직업**: 34세 / 광고회사 마케터
+- **관심사**: 사회 정의, 공정성, 언론 비판
+- **성향**: 팩트체크 습관이 있고, 정치적 논쟁에 민감
+- **기기 사용**: 모바일 기반 뉴스 앱을 자주 사용
+- **문제점**: 기사 제목이나 본문이 나중에 슬쩍 바뀌는 경우가 많아 불신이 큼
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/908fc9aa-6e09-4f0d-b4e9-9ec3b64d5e02) and start prompting.
+- **요구사항**: 기사 수정 내역 비교 기능
+- **사용자 스토리**:
+    
+    "직장인으로서, 저는 기사가 처음과 어떻게 달라졌는지 확인하고 싶습니다. 그래서 기사 신뢰도를 스스로 판단할 수 있기를 원합니다."
 
-Changes made via Lovable will be committed automatically to this repo.
+**목표**: 기사 수정 전후 내용을 비교해 신뢰할 수 있는 언론사 판별하기
 
-**Use your preferred IDE**
+**시나리오**:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/908fc9aa-6e09-4f0d-b4e9-9ec3b64d5e02) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- 점심시간에 뉴스를 보던 김소연은 한 기사 제목이 자극적이라 클릭한다.
+- 기사를 읽던 중, 오전에 봤던 내용과 조금 다르다는 느낌을 받는다.
+- 김소연은 해당 기사 URL을 복사해 수정 이력 조회 서비스에서 조회한다.
+- 수정 내역에서 제목이 세 번, 본문이 두 번 수정된 것을 확인하고 어떤 내용이 바뀌었는지 비교한다.
+- 처음에는 확정적 표현이었지만 지금은 '의혹'으로 바뀐 것을 보고, 언론사의 신뢰도를 의심하게 된다.
+- 김소연은 해당 언론사의 구독을 취소하고, 이후 뉴스 선택 시 참고하기로 한다.
