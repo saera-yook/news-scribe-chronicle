@@ -1,6 +1,7 @@
+
 import { useState } from 'react';
 import { Home, Clock, Heart, Menu } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -21,39 +22,42 @@ interface AppSidebarProps {
 
 export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
   const { state } = useSidebar();
+  const navigate = useNavigate();
+  const location = useLocation();
   const collapsed = state === 'collapsed';
 
   const menuItems = [
-    { id: 'home', title: '기사 목록', icon: Home },
-    { id: 'myArticles', title: '내가 조회한 기사', icon: Clock },
-    { id: 'likes', title: '좋아요/구독 관리', icon: Heart },
+    { id: 'home', title: '기사 목록', icon: Home, path: '/' },
+    { id: 'myArticles', title: '내가 조회한 기사', icon: Clock, path: '/my-articles' },
+    { id: 'likes', title: '좋아요/구독 관리', icon: Heart, path: '/' },
   ];
 
-  const isActive = (id: string) => currentView === id;
+  const isActive = (item: any) => {
+    if (item.path === '/my-articles') {
+      return location.pathname === '/my-articles';
+    }
+    if (item.id === 'likes') {
+      return location.pathname === '/' && currentView === 'likes';
+    }
+    return location.pathname === '/' && (currentView === 'home' || currentView === 'history');
+  };
 
-  const handleMenuClick = (id: string) => {
-    onViewChange(id);
-    
-    // "기사 목록" 메뉴 클릭 시 페이지 상단으로 스크롤
-    if (id === 'home') {
+  const handleMenuClick = (item: any) => {
+    if (item.path === '/my-articles') {
+      navigate('/my-articles');
+    } else if (item.id === 'likes') {
+      navigate('/');
+      onViewChange('likes');
+    } else {
+      navigate('/');
+      onViewChange('home');
+      
+      // "기사 목록" 메뉴 클릭 시 페이지 상단으로 스크롤
       setTimeout(() => {
         window.scrollTo({ 
           top: 0, 
           behavior: 'smooth' 
         });
-      }, 100);
-    }
-    
-    // "내가 조회한 기사" 메뉴 클릭 시 해당 섹션으로 스크롤
-    if (id === 'myArticles') {
-      setTimeout(() => {
-        const myArticlesSection = document.getElementById('myArticlesSection');
-        if (myArticlesSection) {
-          myArticlesSection.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
       }, 100);
     }
   };
@@ -89,9 +93,9 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
-                    onClick={() => handleMenuClick(item.id)}
+                    onClick={() => handleMenuClick(item)}
                     className={`
-                      ${isActive(item.id) 
+                      ${isActive(item) 
                         ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium' 
                         : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                       } 

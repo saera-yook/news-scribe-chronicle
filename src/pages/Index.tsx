@@ -10,6 +10,8 @@ import { UrlInput } from '../components/UrlInput';
 import { Timeline } from '../components/Timeline';
 import { VersionCompare } from '../components/VersionCompare';
 import { ActionButtons } from '../components/ActionButtons';
+import { ChangeSummary } from '../components/ChangeSummary';
+import { SubscriptionTabs } from '../components/SubscriptionTabs';
 
 import { mockNewsData, mockUserArticles } from '../data/mockData';
 import { generateRandomHistory, getOrgFromUrl, getReporterFromHistory } from '../utils/diffUtils';
@@ -23,6 +25,7 @@ const Index = () => {
   const [selectedB, setSelectedB] = useState(0);
   const [likeStatus, setLikeStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showChangeSummary, setShowChangeSummary] = useState(false);
   
   // User data
   const [myArticles, setMyArticles] = useState<UserArticle[]>(mockUserArticles);
@@ -30,6 +33,9 @@ const Index = () => {
     'https://newstapa.org/article/20250627-education-seminar': true,
     'https://hankyoreh.com/article/20250626-climate-policy': true,
     'https://ytn.co.kr/article/20250625-housing-crisis': true,
+    'https://chosun.com/article/20250624-tech-news': true,
+    'https://donga.com/article/20250623-sports-news': true,
+    'https://joongang.co.kr/article/20250622-economy-news': true,
   });
   
   // Subscription data
@@ -63,8 +69,13 @@ const Index = () => {
     setCurrentHistory(history);
     setSelectedA(history.length - 1);
     setSelectedB(Math.max(0, history.length - 2));
-    setCurrentView('history');
+    setShowChangeSummary(true);
     setLikeStatus('');
+  };
+
+  const proceedToHistory = () => {
+    setShowChangeSummary(false);
+    setCurrentView('history');
   };
 
   const handleUrlSubmit = (url: string) => {
@@ -183,6 +194,11 @@ const Index = () => {
     <div className="space-y-8">
       <UrlInput onSubmit={handleUrlSubmit} loading={loading} />
       
+      <SubscriptionTabs 
+        subscriptionData={subscriptionData}
+        onShowHistory={showHistory}
+      />
+      
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">최근 뉴스 기사</h2>
         <div className="grid gap-4">
@@ -195,29 +211,29 @@ const Index = () => {
           ))}
         </div>
       </div>
+    </div>
+  );
+
+  const renderChangeSummarySection = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <Button
+          onClick={() => {
+            setShowChangeSummary(false);
+            setCurrentView('home');
+          }}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          기사 목록으로
+        </Button>
+      </div>
       
-      {myArticles.length > 0 && (
-        <div id="myArticlesSection" className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">내가 조회한 기사</h2>
-          <div className="grid gap-4">
-            {myArticles.map((article, index) => (
-              <div
-                key={index}
-                className="p-4 bg-cyan-50 border border-cyan-200 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200"
-                onClick={() => showHistory(undefined, article.history)}
-              >
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  {article.title || article.url}
-                </h3>
-                {article.date && (
-                  <p className="text-sm text-gray-600 mb-2">{article.date}</p>
-                )}
-                <p className="text-sm text-gray-700">{article.desc || ''}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <ChangeSummary
+        history={currentHistory}
+        onProceed={proceedToHistory}
+      />
     </div>
   );
 
@@ -225,7 +241,10 @@ const Index = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Button
-          onClick={() => setCurrentView('home')}
+          onClick={() => {
+            setCurrentView('home');
+            setShowChangeSummary(false);
+          }}
           variant="outline"
           className="flex items-center gap-2"
         >
@@ -356,11 +375,13 @@ const Index = () => {
   );
 
   const renderContent = () => {
+    if (showChangeSummary) {
+      return renderChangeSummarySection();
+    }
+    
     switch (currentView) {
       case 'history':
         return renderHistorySection();
-      case 'myArticles':
-        return renderHomeSection();
       case 'likes':
         return renderLikesSection();
       default:
