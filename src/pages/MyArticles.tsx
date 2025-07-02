@@ -9,7 +9,6 @@ import { Timeline } from '../components/Timeline';
 import { VersionCompare } from '../components/VersionCompare';
 import { ActionButtons } from '../components/ActionButtons';
 
-import { mockUserArticles } from '../data/mockData';
 import { NewsVersion, UserArticle } from '../types/news';
 
 const MyArticles = () => {
@@ -18,6 +17,10 @@ const MyArticles = () => {
   const [selectedA, setSelectedA] = useState(0);
   const [selectedB, setSelectedB] = useState(0);
   const [likeStatus, setLikeStatus] = useState('');
+
+  // localStorage에서 조회한 기사 목록 가져오기
+  const myArticlesMap = JSON.parse(localStorage.getItem('myArticles') || '{}');
+  const myArticles = Object.values(myArticlesMap) as UserArticle[];
 
   const showHistory = (customHistory: NewsVersion[]) => {
     if (customHistory.length === 0) return;
@@ -43,23 +46,33 @@ const MyArticles = () => {
   const renderArticlesList = () => (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">내가 조회한 기사</h2>
-      <div className="grid gap-4">
-        {mockUserArticles.map((article, index) => (
-          <div
-            key={index}
-            className="p-4 bg-cyan-50 border border-cyan-200 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200"
-            onClick={() => showHistory(article.history)}
-          >
-            <h3 className="font-semibold text-gray-900 mb-2">
-              {article.title || article.url}
-            </h3>
-            {article.date && (
-              <p className="text-sm text-gray-600 mb-2">{article.date}</p>
-            )}
-            <p className="text-sm text-gray-700">{article.desc || ''}</p>
-          </div>
-        ))}
-      </div>
+      {myArticles.length > 0 ? (
+        <div className="grid gap-4">
+          {myArticles.map((article, index) => (
+            <div
+              key={index}
+              className="p-4 bg-cyan-50 border border-cyan-200 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200"
+              onClick={() => showHistory(article.history)}
+            >
+              <h3 className="font-semibold text-gray-900 mb-2">
+                {article.title || article.url}
+              </h3>
+              {article.date && (
+                <p className="text-sm text-gray-600 mb-2">{article.date}</p>
+              )}
+              <p className="text-sm text-gray-700">{article.desc || ''}</p>
+              <div className="mt-2 text-xs text-gray-500">
+                {article.history.length}개 버전
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>조회한 기사가 없습니다.</p>
+          <p className="text-sm mt-2">메인 페이지에서 기사를 클릭하여 조회해보세요.</p>
+        </div>
+      )}
     </div>
   );
 

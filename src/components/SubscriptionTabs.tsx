@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { NewsCard } from './NewsCard';
 import { mockNewsData } from '../data/mockData';
-import { NewsArticle, SubscriptionData } from '../types/news';
+import { NewsArticle, SubscriptionData, UserArticle } from '../types/news';
 
 interface SubscriptionTabsProps {
   subscriptionData: SubscriptionData;
@@ -25,6 +25,20 @@ export function SubscriptionTabs({ subscriptionData, onShowHistory }: Subscripti
         article.reporter?.includes(reporter.replace('기자', ''))
       )
     );
+  };
+
+  const addToMyArticles = (article: NewsArticle) => {
+    const userArticle: UserArticle = {
+      url: article.url,
+      title: article.title,
+      date: article.date,
+      desc: article.desc,
+      history: article.history
+    };
+    
+    const myArticlesMap = JSON.parse(localStorage.getItem('myArticles') || '{}');
+    myArticlesMap[article.url] = userArticle;
+    localStorage.setItem('myArticles', JSON.stringify(myArticlesMap));
   };
 
   const subscribedOrgArticles = getSubscribedOrgArticles();
@@ -51,7 +65,7 @@ export function SubscriptionTabs({ subscriptionData, onShowHistory }: Subscripti
                 <NewsCard
                   key={article.id}
                   article={article}
-                  onClick={() => onShowHistory(article.id)}
+                  onClick={() => addToMyArticles(article)}
                 />
               ))}
             </div>
@@ -70,7 +84,7 @@ export function SubscriptionTabs({ subscriptionData, onShowHistory }: Subscripti
                 <NewsCard
                   key={article.id}
                   article={article}
-                  onClick={() => onShowHistory(article.id)}
+                  onClick={() => addToMyArticles(article)}
                 />
               ))}
             </div>
