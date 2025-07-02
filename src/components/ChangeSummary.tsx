@@ -1,5 +1,4 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { AlertTriangle, FileText, Pencil } from 'lucide-react';
 import { NewsVersion } from '../types/news';
@@ -42,16 +41,16 @@ export function ChangeSummary({ history, onProceed }: ChangeSummaryProps) {
       summary = '주로 오타 수정이나 문체 개선 수준의 경미한 변경입니다.';
     }
     
-    return { type: changeType, summary };
+    return { type, summary };
   };
 
   const { type, summary } = analyzeChanges();
   
   const getChangeIcon = () => {
     switch (type) {
-      case 'major': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'moderate': return <FileText className="h-5 w-5 text-yellow-500" />;
-      default: return <Pencil className="h-5 w-5 text-green-500" />;
+      case 'major': return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'moderate': return <FileText className="h-4 w-4 text-yellow-500" />;
+      default: return <Pencil className="h-4 w-4 text-green-500" />;
     }
   };
   
@@ -72,33 +71,29 @@ export function ChangeSummary({ history, onProceed }: ChangeSummaryProps) {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          {getChangeIcon()}
-          <CardTitle>변경 이력 분석</CardTitle>
-          {getChangeBadge()}
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        {getChangeIcon()}
+        <span className="font-medium text-gray-900">변경 이력 분석</span>
+        {getChangeBadge()}
+      </div>
+      
+      <p className="text-sm text-gray-700">{summary}</p>
+      
+      <div className="bg-gray-50 p-3 rounded-lg">
+        <div className="text-xs text-gray-600 space-y-1">
+          <div>• 총 {history.length}개 버전</div>
+          <div>• 첫 게시: {history[0]?.timestamp}</div>
+          <div>• 최종 수정: {history[history.length - 1]?.timestamp}</div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-gray-700">{summary}</p>
-        
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h4 className="font-semibold mb-2">변경 정보</h4>
-          <ul className="text-sm text-gray-600 space-y-1">
-            <li>• 총 {history.length}개 버전</li>
-            <li>• 첫 게시: {history[0]?.timestamp}</li>
-            <li>• 최종 수정: {history[history.length - 1]?.timestamp}</li>
-          </ul>
-        </div>
-        
-        <button
-          onClick={onProceed}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          상세 변경 이력 확인하기
-        </button>
-      </CardContent>
-    </Card>
+      </div>
+      
+      <button
+        onClick={onProceed}
+        className="w-full bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+      >
+        상세 변경 이력 확인하기
+      </button>
+    </div>
   );
 }
