@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -62,6 +61,11 @@ const Index = () => {
     localStorage.setItem('myArticles', JSON.stringify(myArticlesMap));
   };
 
+  const handleUrlSubmit = (url: string) => {
+    console.log('URL submitted:', url);
+    // TODO: Implement URL analysis functionality
+  };
+
   const renderHomeView = () => (
     <div className="space-y-8">
       <div className="text-center space-y-4">
@@ -69,7 +73,7 @@ const Index = () => {
         <p className="text-xl text-gray-600">투명하고 신뢰할 수 있는 저널리즘을 위해</p>
       </div>
 
-      <UrlInput />
+      <UrlInput onSubmit={handleUrlSubmit} />
 
       <div className="max-w-2xl mx-auto">
         <div className="flex gap-2">
