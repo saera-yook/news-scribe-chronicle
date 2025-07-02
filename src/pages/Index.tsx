@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -116,7 +117,7 @@ const Index = () => {
 
       <SubscriptionTabs 
         subscriptionData={subscriptionData}
-        onShowHistory={() => {}} // 더 이상 히스토리 페이지로 이동하지 않음
+        onShowHistory={() => {}}
       />
 
       <div className="space-y-6">
