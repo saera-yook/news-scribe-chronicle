@@ -4,18 +4,17 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
-import { AppSidebar } from '../components/AppSidebar';
-import { NewsCard } from '../components/NewsCard';
-import { UrlInput } from '../components/UrlInput';
-import { Timeline } from '../components/Timeline';
-import { VersionCompare } from '../components/VersionCompare';
-import { ActionButtons } from '../components/ActionButtons';
-import { ChangeSummary } from '../components/ChangeSummary';
-import { SubscriptionTabs } from '../components/SubscriptionTabs';
+import { AppSidebar } from '../components/AppSidebar.tsx';
+import { NewsCard } from '../components/NewsCard.tsx';
+import { UrlInput } from '../components/UrlInput.tsx';
+import { Timeline } from '../components/Timeline.tsx';
+import { VersionCompare } from '../components/VersionCompare.tsx';
+import { ActionButtons } from '../components/ActionButtons.tsx';
+import { SubscriptionTabs } from '../components/SubscriptionTabs.tsx';
 
-import { mockNewsData, mockUserArticles } from '../data/mockData';
-import { generateRandomHistory, getOrgFromUrl, getReporterFromHistory } from '../utils/diffUtils';
-import { NewsVersion, UserArticle, SubscriptionData } from '../types/news';
+import { mockNewsData, mockUserArticles } from '../data/mockData.ts';
+import { generateRandomHistory, getOrgFromUrl, getReporterFromHistory } from '../utils/diffUtils.ts';
+import { NewsVersion, UserArticle, SubscriptionData } from '../types/news.ts';
 
 const Index = () => {
   const { toast } = useToast();
@@ -25,7 +24,6 @@ const Index = () => {
   const [selectedB, setSelectedB] = useState(0);
   const [likeStatus, setLikeStatus] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showChangeSummary, setShowChangeSummary] = useState(false);
   
   // User data
   const [myArticles, setMyArticles] = useState<UserArticle[]>(mockUserArticles);
@@ -52,6 +50,7 @@ const Index = () => {
     ]
   });
 
+  // 기사 클릭 시 바로 상세 변경 이력 페이지로 이동
   const showHistory = (articleId?: number, customHistory?: NewsVersion[]) => {
     let history: NewsVersion[] = [];
     
@@ -69,13 +68,8 @@ const Index = () => {
     setCurrentHistory(history);
     setSelectedA(history.length - 1);
     setSelectedB(Math.max(0, history.length - 2));
-    setShowChangeSummary(true);
+    setCurrentView('history'); // 바로 상세 이력 페이지로 이동
     setLikeStatus('');
-  };
-
-  const proceedToHistory = () => {
-    setShowChangeSummary(false);
-    setCurrentView('history');
   };
 
   const handleUrlSubmit = (url: string) => {
@@ -214,36 +208,12 @@ const Index = () => {
     </div>
   );
 
-  const renderChangeSummarySection = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Button
-          onClick={() => {
-            setShowChangeSummary(false);
-            setCurrentView('home');
-          }}
-          variant="outline"
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          기사 목록으로
-        </Button>
-      </div>
-      
-      <ChangeSummary
-        history={currentHistory}
-        onProceed={proceedToHistory}
-      />
-    </div>
-  );
-
   const renderHistorySection = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Button
           onClick={() => {
             setCurrentView('home');
-            setShowChangeSummary(false);
           }}
           variant="outline"
           className="flex items-center gap-2"
@@ -284,106 +254,10 @@ const Index = () => {
     </div>
   );
 
-  const renderLikesSection = () => (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900">구독 관리</h2>
-      
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">🔔 구독한 언론사</h3>
-          {subscriptionData.subscribedOrgs.length > 0 ? (
-            <div className="grid gap-3">
-              {subscriptionData.subscribedOrgs.map(org => (
-                <div key={org} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                  <span className="font-medium text-gray-900">{org}</span>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setSubscriptionData(prev => ({
-                        ...prev,
-                        subscribedOrgs: prev.subscribedOrgs.filter(o => o !== org)
-                      }));
-                    }}
-                  >
-                    구독 취소
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">구독한 언론사가 없습니다.</p>
-          )}
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">🧑‍💼 구독한 기자</h3>
-          {subscriptionData.subscribedReporters.length > 0 ? (
-            <div className="grid gap-3">
-              {subscriptionData.subscribedReporters.map(reporter => (
-                <div key={reporter} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                  <span className="font-medium text-gray-900">{reporter}</span>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setSubscriptionData(prev => ({
-                        ...prev,
-                        subscribedReporters: prev.subscribedReporters.filter(r => r !== reporter)
-                      }));
-                    }}
-                  >
-                    구독 취소
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">구독한 기자가 없습니다.</p>
-          )}
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">❤️ 좋아요 한 기사</h3>
-          {subscriptionData.likedArticles.length > 0 ? (
-            <div className="grid gap-3">
-              {subscriptionData.likedArticles.map((article, index) => (
-                <div key={index} className="p-4 bg-red-50 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-2">{article.title}</h4>
-                  <p className="text-sm text-gray-600 mb-3">{article.date}</p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setSubscriptionData(prev => ({
-                        ...prev,
-                        likedArticles: prev.likedArticles.filter((_, i) => i !== index)
-                      }));
-                    }}
-                  >
-                    좋아요 취소
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">좋아요 한 기사가 없습니다.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
   const renderContent = () => {
-    if (showChangeSummary) {
-      return renderChangeSummarySection();
-    }
-    
     switch (currentView) {
       case 'history':
         return renderHistorySection();
-      case 'likes':
-        return renderLikesSection();
       default:
         return renderHomeSection();
     }

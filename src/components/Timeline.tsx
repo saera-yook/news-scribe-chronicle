@@ -1,6 +1,6 @@
 
 import { Clock } from 'lucide-react';
-import { NewsVersion } from '../types/news';
+import { NewsVersion } from '../types/news.ts';
 
 interface TimelineProps {
   history: NewsVersion[];

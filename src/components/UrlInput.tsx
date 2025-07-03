@@ -1,9 +1,9 @@
 
 import { useState } from 'react';
 import { Search, AlertCircle } from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Card } from './ui/card';
+import { Button } from './ui/button.tsx';
+import { Input } from './ui/input.tsx';
+import { Card } from './ui/card.tsx';
 
 interface UrlInputProps {
   onSubmit: (url: string) => void;

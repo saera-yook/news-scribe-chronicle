@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
 import { Heart, Bell, Download, FileText, CheckCircle, X } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { Button } from './ui/button.tsx';
+import { Card, CardContent } from './ui/card.tsx';
 import { useToast } from '@/hooks/use-toast';
 
 interface ActionButtonsProps {

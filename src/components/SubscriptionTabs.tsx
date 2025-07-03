@@ -1,9 +1,9 @@
 
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { NewsCard } from './NewsCard';
-import { mockNewsData } from '../data/mockData';
-import { NewsArticle, SubscriptionData } from '../types/news';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs.tsx';
+import { NewsCard } from './NewsCard.tsx';
+import { mockNewsData } from '../data/mockData.ts';
+import { NewsArticle, SubscriptionData } from '../types/news.ts';
 
 interface SubscriptionTabsProps {
   subscriptionData: SubscriptionData;

@@ -1,8 +1,8 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card.tsx';
+import { Badge } from './ui/badge.tsx';
 import { AlertTriangle, FileText, Pencil } from 'lucide-react';
-import { NewsVersion } from '../types/news';
+import { NewsVersion } from '../types/news.ts';
 
 interface ChangeSummaryProps {
   history: NewsVersion[];

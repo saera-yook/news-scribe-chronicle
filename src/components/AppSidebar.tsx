@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Home, Clock, Heart, Menu } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -29,26 +28,28 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
   const menuItems = [
     { id: 'home', title: '기사 목록', icon: Home, path: '/' },
     { id: 'myArticles', title: '내가 조회한 기사', icon: Clock, path: '/my-articles' },
-    { id: 'likes', title: '좋아요/구독 관리', icon: Heart, path: '/' },
+    { id: 'likes', title: '좋아요/구독 관리', icon: Heart, path: '/likes' },
   ];
 
   const isActive = (item: any) => {
     if (item.path === '/my-articles') {
       return location.pathname === '/my-articles';
     }
-    if (item.id === 'likes') {
-      return location.pathname === '/' && currentView === 'likes';
+    if (item.path === '/likes') {
+      return location.pathname === '/likes';
     }
     return location.pathname === '/' && (currentView === 'home' || currentView === 'history');
   };
 
   const handleMenuClick = (item: any) => {
     if (item.path === '/my-articles') {
+      // 내가 조회한 기사 페이지로 이동
       navigate('/my-articles');
-    } else if (item.id === 'likes') {
-      navigate('/');
-      onViewChange('likes');
+    } else if (item.path === '/likes') {
+      // 좋아요/구독 관리 페이지로 이동
+      navigate('/likes');
     } else {
+      // 기사 목록 (홈)
       navigate('/');
       onViewChange('home');
       

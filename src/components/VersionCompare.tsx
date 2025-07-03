@@ -1,7 +1,7 @@
 
-import { NewsVersion } from '../types/news';
-import { diffText } from '../utils/diffUtils';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { NewsVersion } from '../types/news.ts';
+import { diffText } from '../utils/diffUtils.ts';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card.tsx';
 
 interface VersionCompareProps {
   versionA: NewsVersion;
