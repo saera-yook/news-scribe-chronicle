@@ -22,10 +22,8 @@ export function sortNews(articles: NewsArticle[], sortBy: SortOption): NewsArtic
       case 'date-asc':
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       case 'views-desc':
-        // 조회수가 없는 경우 히스토리 길이를 기준으로 정렬
-        const aViews = a.views || a.history.length;
-        const bViews = b.views || b.history.length;
-        return bViews - aViews;
+        // 조회수 대신 히스토리 길이를 기준으로 정렬 (변경 이력이 많을수록 관심도가 높다고 가정)
+        return b.history.length - a.history.length;
       case 'title-asc':
         return a.title.localeCompare(b.title, 'ko');
       default:
