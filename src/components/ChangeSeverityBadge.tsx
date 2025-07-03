@@ -1,4 +1,3 @@
-
 import { Badge } from './ui/badge';
 import { ChangeSeverity } from '../utils/changeAnalysis';
 
@@ -13,7 +12,7 @@ export function ChangeSeverityBadge({ severity }: ChangeSeverityBadgeProps) {
       className: 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'
     },
     moderate: {
-      label: '보통 수정',
+      label: '단순 오탈자 수정',
       className: 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200'
     },
     major: {
