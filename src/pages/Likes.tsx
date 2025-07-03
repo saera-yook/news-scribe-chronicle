@@ -5,7 +5,11 @@ import { Button } from '@/components/ui/button';
 import { AppSidebar } from '../components/AppSidebar.tsx';
 import { SubscriptionData, UserArticle } from '../types/news.ts';
 
-const Likes = () => {
+interface LikesProps {
+  onShowHistory?: (customHistory: any[]) => void;
+}
+
+const Likes = ({ onShowHistory }: LikesProps) => {
   // 실제 서비스에서는 전역 상태나 API에서 가져올 데이터
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData>({
     subscribedOrgs: ['newstapa.org', 'hankyoreh.com'],
@@ -15,10 +19,32 @@ const Likes = () => {
         url: 'https://newstapa.org/article/20250627-education-seminar',
         title: '대한교조, 리박스쿨, 뉴라이트의 극우 역사 세미나',
         date: '2025-06-27',
-        history: []
+        history: [
+          {
+            timestamp: '2025-06-27 09:00:00',
+            title: '대한교조, 리박스쿨, 뉴라이트의 극우 역사 세미나',
+            body: '대한교조와 리박스쿨이 주최한 극우 성향의 역사 세미나가 논란이 되고 있다.',
+            changeType: 'both'
+          },
+          {
+            timestamp: '2025-06-27 11:30:00',
+            title: '대한교조, 리박스쿨, 뉴라이트의 극우 역사 세미나 (수정)',
+            body: '대한교조와 리박스쿨이 주최한 극우 성향의 역사 세미나가 교육계에서 큰 논란이 되고 있다. 전문가들은 이러한 세미나가 역사 교육에 미칠 영향을 우려하고 있다.',
+            changeType: 'both'
+          }
+        ]
       }
     ]
   });
+
+  const handleArticleClick = (article: UserArticle) => {
+    if (onShowHistory && article.history.length > 0) {
+      onShowHistory(article.history);
+    } else {
+      // 기본 동작: 새 창에서 기사 열기
+      window.open(article.url, '_blank');
+    }
+  };
 
   const renderLikesSection = () => (
     <div className="space-y-8">
@@ -84,21 +110,33 @@ const Likes = () => {
           {subscriptionData.likedArticles.length > 0 ? (
             <div className="grid gap-3">
               {subscriptionData.likedArticles.map((article, index) => (
-                <div key={index} className="p-4 bg-red-50 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-2">{article.title}</h4>
+                <div 
+                  key={index} 
+                  className="p-4 bg-red-50 rounded-lg cursor-pointer hover:bg-red-100 transition-colors"
+                  onClick={() => handleArticleClick(article)}
+                >
+                  <h4 className="font-semibold text-gray-900 mb-2 hover:text-newstapa-blue transition-colors">
+                    {article.title}
+                  </h4>
                   <p className="text-sm text-gray-600 mb-3">{article.date}</p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setSubscriptionData(prev => ({
-                        ...prev,
-                        likedArticles: prev.likedArticles.filter((_, i) => i !== index)
-                      }));
-                    }}
-                  >
-                    좋아요 취소
-                  </Button>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">
+                      클릭하여 수정 이력 보기
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSubscriptionData(prev => ({
+                          ...prev,
+                          likedArticles: prev.likedArticles.filter((_, i) => i !== index)
+                        }));
+                      }}
+                    >
+                      좋아요 취소
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

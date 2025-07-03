@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs.tsx';
 import { NewsCard } from './NewsCard.tsx';
@@ -10,9 +9,16 @@ import { filterNewsBySearch, sortNews } from '../utils/newsUtils.ts';
 interface SubscriptionTabsProps {
   subscriptionData: SubscriptionData;
   onShowHistory: (articleId: number) => void;
+  likedArticleIds?: Set<number>;
+  onLikeToggle?: (articleId: number) => void;
 }
 
-export function SubscriptionTabs({ subscriptionData, onShowHistory }: SubscriptionTabsProps) {
+export function SubscriptionTabs({ 
+  subscriptionData, 
+  onShowHistory, 
+  likedArticleIds = new Set(),
+  onLikeToggle 
+}: SubscriptionTabsProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('date-desc');
 
@@ -73,6 +79,8 @@ export function SubscriptionTabs({ subscriptionData, onShowHistory }: Subscripti
                   key={article.id}
                   article={article}
                   onClick={() => onShowHistory(article.id)}
+                  isLiked={likedArticleIds.has(article.id)}
+                  onLikeToggle={onLikeToggle}
                 />
               ))}
             </div>
@@ -92,6 +100,8 @@ export function SubscriptionTabs({ subscriptionData, onShowHistory }: Subscripti
                   key={article.id}
                   article={article}
                   onClick={() => onShowHistory(article.id)}
+                  isLiked={likedArticleIds.has(article.id)}
+                  onLikeToggle={onLikeToggle}
                 />
               ))}
             </div>

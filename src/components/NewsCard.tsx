@@ -1,18 +1,25 @@
-
-import { ExternalLink, Calendar, User } from 'lucide-react';
+import { ExternalLink, Calendar, User, Heart } from 'lucide-react';
 import { NewsArticle } from '../types/news';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { analyzeChangeSeverity } from '../utils/changeAnalysis';
 import { ChangeSeverityBadge } from './ChangeSeverityBadge';
+import { Button } from './ui/button';
 
 interface NewsCardProps {
   article: NewsArticle;
   onClick: () => void;
+  isLiked?: boolean;
+  onLikeToggle?: (articleId: number) => void;
 }
 
-export function NewsCard({ article, onClick }: NewsCardProps) {
+export function NewsCard({ article, onClick, isLiked = false, onLikeToggle }: NewsCardProps) {
   const changeSeverity = analyzeChangeSeverity(article);
   const hasChanges = changeSeverity !== 'none';
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onLikeToggle?.(article.id);
+  };
 
   return (
     <Card 
@@ -26,7 +33,26 @@ export function NewsCard({ article, onClick }: NewsCardProps) {
         </div>
       )}
 
-      <CardHeader className={`pb-3 ${hasChanges ? 'pr-24' : 'pr-6'}`}>
+      {/* 좋아요 버튼 - 우측 상단 (변경 플래그가 없을 때) 또는 변경 플래그 아래 */}
+      <div className={`absolute ${hasChanges ? 'top-12 right-3' : 'top-3 right-3'} z-10`}>
+        <Button
+          size="icon-sm"
+          variant="ghost"
+          onClick={handleLikeClick}
+          className="h-8 w-8 rounded-full bg-white/80 hover:bg-white shadow-sm"
+          aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+        >
+          <Heart 
+            className={`h-4 w-4 transition-colors ${
+              isLiked 
+                ? 'fill-red-500 text-red-500' 
+                : 'text-gray-400 hover:text-red-400'
+            }`}
+          />
+        </Button>
+      </div>
+
+      <CardHeader className={`pb-3 ${hasChanges ? 'pr-24' : 'pr-16'}`}>
         <h3 className="font-semibold text-lg text-gray-900 leading-tight line-clamp-2">
           {article.title}
         </h3>

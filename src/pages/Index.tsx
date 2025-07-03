@@ -56,6 +56,9 @@ const Index = () => {
     ]
   });
 
+  // 좋아요한 기사 ID 목록
+  const [likedArticleIds, setLikedArticleIds] = useState<Set<number>>(new Set([1])); // 예시로 첫 번째 기사를 좋아요 상태로 설정
+
   // 필터링 및 정렬된 기사 목록
   const filteredAndSortedNews = useMemo(() => {
     const filtered = filterNewsBySearch(mockNewsData, searchTerm);
@@ -82,6 +85,54 @@ const Index = () => {
     setSelectedB(Math.max(0, history.length - 2));
     setCurrentView('history'); // 바로 상세 이력 페이지로 이동
     setLikeStatus('');
+  };
+
+  // 좋아요 토글 함수
+  const handleLikeToggle = (articleId: number) => {
+    const article = mockNewsData.find(a => a.id === articleId);
+    if (!article) return;
+
+    const isCurrentlyLiked = likedArticleIds.has(articleId);
+    
+    if (isCurrentlyLiked) {
+      // 좋아요 취소
+      setLikedArticleIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(articleId);
+        return newSet;
+      });
+      
+      setSubscriptionData(prev => ({
+        ...prev,
+        likedArticles: prev.likedArticles.filter(a => a.url !== article.url)
+      }));
+      
+      toast({
+        title: "좋아요 취소",
+        description: "기사 좋아요를 취소했습니다.",
+      });
+    } else {
+      // 좋아요 추가
+      setLikedArticleIds(prev => new Set([...prev, articleId]));
+      
+      const newLikedArticle: UserArticle = {
+        url: article.url,
+        title: article.title,
+        date: article.date,
+        desc: article.desc,
+        history: article.history
+      };
+      
+      setSubscriptionData(prev => ({
+        ...prev,
+        likedArticles: [...prev.likedArticles, newLikedArticle]
+      }));
+      
+      toast({
+        title: "좋아요 완료",
+        description: "기사를 좋아요 했습니다.",
+      });
+    }
   };
 
   const handleUrlSubmit = (url: string) => {
@@ -224,6 +275,8 @@ const Index = () => {
                 <NewsCard
                   article={article}
                   onClick={() => showHistory(article.id)}
+                  isLiked={likedArticleIds.has(article.id)}
+                  onLikeToggle={handleLikeToggle}
                 />
               </div>
             ))
