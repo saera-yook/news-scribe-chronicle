@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 
 import { AppSidebar } from '../components/AppSidebar.tsx';
 import { NewsCard } from '../components/NewsCard.tsx';
+import { NewsFilter, SortOption } from '../components/NewsFilter.tsx';
 import { UrlInput } from '../components/UrlInput.tsx';
 import { Timeline } from '../components/Timeline.tsx';
 import { VersionCompare } from '../components/VersionCompare.tsx';
@@ -14,6 +15,7 @@ import { SubscriptionTabs } from '../components/SubscriptionTabs.tsx';
 
 import { mockNewsData, mockUserArticles } from '../data/mockData.ts';
 import { generateRandomHistory, getOrgFromUrl, getReporterFromHistory } from '../utils/diffUtils.ts';
+import { filterNewsBySearch, sortNews } from '../utils/newsUtils.ts';
 import { NewsVersion, UserArticle, SubscriptionData } from '../types/news.ts';
 
 const Index = () => {
@@ -24,6 +26,10 @@ const Index = () => {
   const [selectedB, setSelectedB] = useState(0);
   const [likeStatus, setLikeStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // 검색 및 정렬 상태
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<SortOption>('date-desc');
   
   // User data
   const [myArticles, setMyArticles] = useState<UserArticle[]>(mockUserArticles);
@@ -49,6 +55,12 @@ const Index = () => {
       }
     ]
   });
+
+  // 필터링 및 정렬된 기사 목록
+  const filteredAndSortedNews = useMemo(() => {
+    const filtered = filterNewsBySearch(mockNewsData, searchTerm);
+    return sortNews(filtered, sortBy);
+  }, [searchTerm, sortBy]);
 
   // 기사 클릭 시 바로 상세 변경 이력 페이지로 이동
   const showHistory = (articleId?: number, customHistory?: NewsVersion[]) => {
@@ -197,15 +209,30 @@ const Index = () => {
         <h2 id="recent-news-heading" className="text-2xl font-bold text-high-contrast">
           최근 뉴스 기사
         </h2>
+        
+        <NewsFilter 
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+        />
+        
         <div className="grid gap-4" role="list">
-          {mockNewsData.map(article => (
-            <div key={article.id} role="listitem">
-              <NewsCard
-                article={article}
-                onClick={() => showHistory(article.id)}
-              />
+          {filteredAndSortedNews.length > 0 ? (
+            filteredAndSortedNews.map(article => (
+              <div key={article.id} role="listitem">
+                <NewsCard
+                  article={article}
+                  onClick={() => showHistory(article.id)}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              <p>검색 결과가 없습니다.</p>
+              <p className="text-sm mt-2">다른 키워드로 검색해보세요.</p>
             </div>
-          ))}
+          )}
         </div>
       </section>
     </div>
