@@ -138,9 +138,9 @@ export function NewsCard({ article, onClick }: NewsCardProps) {
       onClick={onClick}
     >
       {/* 변경 성격 플래그 - 우측 상단 (변경 사항이 있을 때만 표시) */}
-      {hasChanges && (
+      {hasChanges && changeSeverity !== 'none' && (
         <div className="absolute top-3 right-3 z-10">
-          <ChangeSeverityBadge severity={changeSeverity as 'minor' | 'moderate' | 'major'} />
+          <ChangeSeverityBadge severity={changeSeverity} />
         </div>
       )}
 
