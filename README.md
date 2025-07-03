@@ -1,5 +1,5 @@
 # 뉴스 기사 수정 이력 조회 서비스
-배포 URL: [https://delicate-bunny-1ee659.netlify.app/](https://tourmaline-marshmallow-7070f1.netlify.app/)
+배포 URL: https://tourmaline-marshmallow-7070f1.netlify.app/
 
 ## 1. 🧭 제품 개요
 - 온라인 뉴스 기사의 신뢰성과 투명성을 높이기 위해, 기사의 수정 이력(제목 및 본문 변경사항)을 사용자에게 시각적으로 제공하는 웹 서비스를 개발한다.
