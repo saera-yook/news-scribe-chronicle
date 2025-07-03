@@ -193,18 +193,21 @@ const Index = () => {
         onShowHistory={showHistory}
       />
       
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">최근 뉴스 기사</h2>
-        <div className="grid gap-4">
+      <section className="space-y-6" aria-labelledby="recent-news-heading">
+        <h2 id="recent-news-heading" className="text-2xl font-bold text-high-contrast">
+          최근 뉴스 기사
+        </h2>
+        <div className="grid gap-4" role="list">
           {mockNewsData.map(article => (
-            <NewsCard
-              key={article.id}
-              article={article}
-              onClick={() => showHistory(article.id)}
-            />
+            <div key={article.id} role="listitem">
+              <NewsCard
+                article={article}
+                onClick={() => showHistory(article.id)}
+              />
+            </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 
@@ -217,8 +220,9 @@ const Index = () => {
           }}
           variant="outline"
           className="flex items-center gap-2"
+          aria-label="기사 목록으로 돌아가기"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           기사 목록으로
         </Button>
       </div>
@@ -266,6 +270,11 @@ const Index = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
+        {/* Skip link for keyboard navigation */}
+        <a href="#main-content" className="skip-link">
+          메인 콘텐츠로 바로가기
+        </a>
+        
         <AppSidebar currentView={currentView} onViewChange={setCurrentView} />
         
         <main className="flex-1 flex flex-col">
@@ -273,17 +282,17 @@ const Index = () => {
             <div className="flex items-center gap-4">
               <SidebarTrigger className="lg:hidden" />
               <div className="flex-1">
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-xl font-bold text-high-contrast">
                   뉴스 수정 이력 조회 서비스
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-medium-contrast">
                   투명하고 신뢰할 수 있는 뉴스를 위한 도구
                 </p>
               </div>
             </div>
           </header>
           
-          <div className="flex-1 p-6">
+          <div id="main-content" className="flex-1 p-6" tabIndex={-1}>
             <div className="max-w-6xl mx-auto">
               {renderContent()}
             </div>

@@ -48,6 +48,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 220 9% 88%;
     --sidebar-border: 220 13% 25%;
     --sidebar-ring: 183 80% 55%;
+
+    /* Accessibility colors - WCAG 2.1 AA compliant */
+    --text-high-contrast: 0 0% 13%; /* #212121 - 4.5:1 contrast */
+    --text-medium-contrast: 0 0% 26%; /* #424242 - 3.0:1 contrast for large text */
+    --focus-ring: 217 89% 37%; /* Blue focus ring */
+    --error-text: 0 65% 35%; /* High contrast red */
+    --success-text: 120 43% 31%; /* High contrast green */
   }
 
   .dark {
@@ -86,6 +93,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Dark mode accessibility colors */
+    --text-high-contrast: 0 0% 87%; /* #dedede - 4.5:1 contrast */
+    --text-medium-contrast: 0 0% 74%; /* #bdbdbd - 3.0:1 contrast for large text */
+    --focus-ring: 217 89% 60%; /* Brighter blue for dark mode */
+    --error-text: 0 65% 65%; /* High contrast red for dark mode */
+    --success-text: 120 43% 69%; /* High contrast green for dark mode */
   }
 }
 
@@ -96,6 +110,60 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-noto-sans;
+  }
+
+  /* Accessibility improvements */
+  
+  /* High contrast text */
+  .text-high-contrast {
+    color: hsl(var(--text-high-contrast));
+  }
+  
+  .text-medium-contrast {
+    color: hsl(var(--text-medium-contrast));
+  }
+
+  /* Focus management */
+  .focus-visible {
+    @apply outline-none ring-2 ring-focus-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Skip link for keyboard navigation */
+  .skip-link {
+    @apply absolute top-0 left-0 bg-primary text-primary-foreground px-4 py-2 rounded-br-md z-50 transform -translate-y-full focus:translate-y-0 transition-transform;
+  }
+
+  /* Minimum touch target size */
+  .min-touch-target {
+    @apply min-h-12 min-w-12; /* 48px minimum */
+  }
+
+  .min-touch-target-small {
+    @apply min-h-8 min-w-8; /* 32px minimum for constrained spaces */
+  }
+
+  /* Screen reader only text */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Focus indicators */
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  a:focus-visible {
+    @apply outline-none ring-2 ring-focus-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Ensure buttons meet minimum size requirements */
+  button {
+    @apply min-h-12 px-4 py-2;
+  }
+
+  button.btn-small {
+    @apply min-h-8 px-3 py-1;
   }
 
   .highlight-diff {
@@ -118,5 +186,28 @@ All colors MUST be HSL.
     width: 1px;
     background: linear-gradient(to bottom, transparent, #e5e7eb, transparent);
     transform: translateX(-50%);
+  }
+
+  /* Improved link styling for accessibility */
+  a {
+    @apply underline-offset-4 hover:underline;
+  }
+
+  /* Better input styling */
+  input, textarea, select {
+    @apply border-2 border-input;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply border-focus-ring;
+  }
+
+  /* Error and success states */
+  .error-text {
+    color: hsl(var(--error-text));
+  }
+
+  .success-text {
+    color: hsl(var(--success-text));
   }
 }

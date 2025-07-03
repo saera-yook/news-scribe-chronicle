@@ -75,7 +75,13 @@ export default {
 					'red-light': '#ef4444',
 					yellow: '#d97706',
 					'yellow-light': '#f59e0b'
-				}
+				},
+				// Accessibility colors
+				'text-high-contrast': 'hsl(var(--text-high-contrast))',
+				'text-medium-contrast': 'hsl(var(--text-medium-contrast))',
+				'focus-ring': 'hsl(var(--focus-ring))',
+				'error-text': 'hsl(var(--error-text))',
+				'success-text': 'hsl(var(--success-text))'
 			},
 			fontFamily: {
 				'noto-sans': ['Noto Sans KR', 'sans-serif'],
@@ -85,6 +91,11 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			// Accessibility spacing
+			spacing: {
+				'touch-target': '3rem', // 48px
+				'touch-target-small': '2rem', // 32px
 			},
 			keyframes: {
 				'accordion-down': {

@@ -35,37 +35,55 @@ export function UrlInput({ onSubmit, loading = false }: UrlInputProps) {
     <Card className="p-6 bg-gradient-to-r from-newstapa-blue/5 to-cyan-50 border-newstapa-blue/20">
       <div className="space-y-4">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-bold text-high-contrast mb-2">
             📰 뉴스 기사 수정 이력 조회
           </h2>
-          <p className="text-gray-600 text-sm">
+          <p className="text-medium-contrast text-sm">
             기사 URL을 입력하여 수정 이력을 확인해보세요
           </p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="flex gap-2">
-            <Input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/news/article"
-              className="flex-1 border-newstapa-blue/30 focus:border-newstapa-blue"
-              disabled={loading}
-            />
-            <Button 
-              type="submit" 
-              disabled={loading}
-              className="bg-newstapa-blue hover:bg-newstapa-blue-light px-6"
-            >
-              <Search className="h-4 w-4 mr-2" />
-              {loading ? '조회 중...' : '조회'}
-            </Button>
+        <form onSubmit={handleSubmit} className="space-y-3" role="search">
+          <div className="space-y-2">
+            <label htmlFor="article-url" className="block text-sm font-medium text-high-contrast">
+              기사 URL
+            </label>
+            <div className="flex gap-2">
+              <Input
+                id="article-url"
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com/news/article"
+                className="flex-1 border-newstapa-blue/30 focus:border-newstapa-blue"
+                disabled={loading}
+                required
+                aria-describedby={error ? "url-error" : "url-help"}
+                aria-invalid={!!error}
+              />
+              <Button 
+                type="submit" 
+                disabled={loading}
+                className="bg-newstapa-blue hover:bg-newstapa-blue-light px-6"
+                aria-label={loading ? '조회 중입니다' : '뉴스 기사 수정 이력 조회'}
+              >
+                <Search className="h-4 w-4 mr-2" aria-hidden="true" />
+                {loading ? '조회 중...' : '조회'}
+              </Button>
+            </div>
+            <div id="url-help" className="text-xs text-medium-contrast">
+              조회하려는 뉴스 기사의 전체 URL을 입력해주세요.
+            </div>
           </div>
           
           {error && (
-            <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-              <AlertCircle className="h-4 w-4" />
+            <div 
+              id="url-error"
+              className="flex items-center gap-2 error-text text-sm bg-red-50 p-3 rounded-lg"
+              role="alert"
+              aria-live="polite"
+            >
+              <AlertCircle className="h-4 w-4" aria-hidden="true" />
               {error}
             </div>
           )}
