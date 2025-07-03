@@ -1,80 +1,13 @@
 
 import { ExternalLink, Calendar, User } from 'lucide-react';
-import { NewsArticle } from '../types/news.ts';
-import { Card, CardContent, CardHeader } from './ui/card.tsx';
-import { Badge } from './ui/badge.tsx';
+import { NewsArticle } from '../types/news';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { analyzeChangeSeverity } from '../utils/changeAnalysis';
+import { ChangeSeverityBadge } from './ChangeSeverityBadge';
 
 interface NewsCardProps {
   article: NewsArticle;
   onClick: () => void;
-}
-
-// 변경 성격을 분석하는 함수
-function analyzeChangeSeverity(article: NewsArticle): 'none' | 'minor' | 'moderate' | 'major' {
-  if (article.history.length < 2) return 'none';
-  
-  const firstVersion = article.history[0];
-  const lastVersion = article.history[article.history.length - 1];
-  
-  const titleChanged = firstVersion.title !== lastVersion.title;
-  const bodyChanged = firstVersion.body !== lastVersion.body;
-  
-  // 변경이 없는 경우
-  if (!titleChanged && !bodyChanged) return 'none';
-  
-  // 제목 변경 비율 계산
-  const titleWords = firstVersion.title.split(' ');
-  const lastTitleWords = lastVersion.title.split(' ');
-  const titleChangeRatio = Math.abs(titleWords.length - lastTitleWords.length) / titleWords.length;
-  
-  // 본문 변경 비율 계산
-  const bodyWords = firstVersion.body.split(' ');
-  const lastBodyWords = lastVersion.body.split(' ');
-  const bodyChangeRatio = Math.abs(bodyWords.length - lastBodyWords.length) / bodyWords.length;
-  
-  // 변경 횟수도 고려
-  const changeCount = article.history.length;
-  
-  // 중대한 변경: 제목이 크게 바뀌었거나, 본문이 20% 이상 변경되었거나, 변경 횟수가 많은 경우
-  if (titleChangeRatio > 0.3 || bodyChangeRatio > 0.2 || changeCount > 4) {
-    return 'major';
-  }
-  
-  // 보통 변경: 제목이 바뀌었거나 본문이 10% 이상 변경된 경우
-  if (titleChanged || bodyChangeRatio > 0.1 || changeCount > 2) {
-    return 'moderate';
-  }
-  
-  // 경미한 변경: 그 외의 경우 (주로 오타 수정 등)
-  return 'minor';
-}
-
-// 변경 성격에 따른 배지 컴포넌트
-function ChangeSeverityBadge({ severity }: { severity: 'minor' | 'moderate' | 'major' }) {
-  const config = {
-    minor: {
-      label: '경미한 수정',
-      className: 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'
-    },
-    moderate: {
-      label: '보통 수정',
-      className: 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200'
-    },
-    major: {
-      label: '중대한 수정',
-      className: 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200'
-    }
-  };
-
-  const { label, className } = config[severity];
-
-  return (
-    <Badge 
-      className={`text-xs font-medium px-2 py-1 ${className}`}
-    >
-      {label}
-    </Badge>
-  );
 }
 
 export function NewsCard({ article, onClick }: NewsCardProps) {
